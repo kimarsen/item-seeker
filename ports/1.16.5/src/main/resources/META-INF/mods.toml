@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="MIT"
+
+[[mods]]
+modId="itemseeker"
+version="1.0.0-1.16.5"
+displayName="Item Seeker"
+authors="kimarsen"
+description='''
+A powerful utility mod that introduces the Seeker's Wand to locate any item across chests, furnaces, and containers in the world with threshold filtering.
+'''
+
+[[dependencies.itemseeker]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36.2.39,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.itemseeker]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"
