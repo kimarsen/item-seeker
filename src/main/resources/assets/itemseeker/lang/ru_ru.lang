@@ -1,0 +1,58 @@
+itemGroup.itemseeker=Item Seeker (Жезл Поиска)
+item.itemseeker.seeker_wand.name=Жезл Поиска
+
+# Tooltip
+tooltip.itemseeker.target=Искомый предмет: %s
+tooltip.itemseeker.no_target=Не выбран
+tooltip.itemseeker.threshold=Порог количества: %d
+tooltip.itemseeker.mode=Режим поиска: %s
+tooltip.itemseeker.mode.loaded=Загруженные чанки
+tooltip.itemseeker.mode.radius=Радиус (%d блоков)
+tooltip.itemseeker.mode.world=Весь мир (Регионы)
+tooltip.itemseeker.instructions.1=ПКМ — открыть интерфейс настройки жезла
+tooltip.itemseeker.instructions.2=Shift + ПКМ — быстрый запуск поиска
+tooltip.itemseeker.shift_hint=Зажмите Shift для просмотра параметров
+
+# GUI
+gui.itemseeker.title=Жезл Поиска Контейнеров
+gui.itemseeker.target_label=Искомый предмет:
+gui.itemseeker.empty_filter=[ Вставьте предмет ]
+gui.itemseeker.threshold_label=Порог количества:
+gui.itemseeker.mode_label=Область поиска:
+gui.itemseeker.match_nbt=Учитывать NBT:
+gui.itemseeker.match_nbt.on=ВКЛ
+gui.itemseeker.match_nbt.off=ВЫКЛ
+gui.itemseeker.btn_scan=НАЧАТЬ ПОИСК
+gui.itemseeker.btn_clear_markers=Сбросить метки
+gui.itemseeker.btn_clear_filter=Очистить фильтр
+gui.itemseeker.results_title=Найдено контейнеров: %d
+gui.itemseeker.no_results=Контейнеры с заданным предметом не найдены.
+gui.itemseeker.btn_tp=ТП
+gui.itemseeker.btn_mark=Метка
+gui.itemseeker.page=Стр. %d / %d
+
+# Chat
+chat.itemseeker.search_start=Поиск контейнеров с предметом %s (порог: %d)...
+chat.itemseeker.results_found=Жезл Поиска: Найдено %d контейнеров:
+chat.itemseeker.entry=- %s на [%d, %d, %d] (Кол-во: %d, Дистанция: %dм)
+chat.itemseeker.tp_hover=Нажмите для телепортации к контейнеру
+chat.itemseeker.tp_success=Телепортация к контейнеру [%d, %d, %d]
+chat.itemseeker.no_results=Контейнеры не найдены в выбранной области.
+chat.itemseeker.no_target_set=Сначала выберите искомый предмет в интерфейсе жезла!
+
+# Containers
+container.itemseeker.chest=Сундук
+container.itemseeker.trapped_chest=Сундук-ловушка
+container.itemseeker.ender_chest=Эндер-сундук
+container.itemseeker.furnace=Печь
+container.itemseeker.shulker_box=Шалкеровый ящик
+container.itemseeker.dispenser=Раздатчик
+container.itemseeker.dropper=Выбрасыватель
+container.itemseeker.hopper=Воронка
+container.itemseeker.brewing_stand=Зельеварочная стойка
+container.itemseeker.minecart_chest=Вагонетка с сундуком
+container.itemseeker.minecart_hopper=Вагонетка с воронкой
+container.itemseeker.donkey=Осёл с сундуком
+container.itemseeker.mule=Мул с сундуком
+container.itemseeker.llama=Лама с сундуком
+container.itemseeker.generic_container=Контейнер

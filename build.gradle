@@ -1,0 +1,37 @@
+plugins {
+    id 'com.gtnewhorizons.retrofuturagradle' version '1.4.9'
+}
+
+group = 'com.itemseeker'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+minecraft {
+    mcVersion = '1.12.2'
+    mcpMappingChannel = 'stable'
+    mcpMappingVersion = '39'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+processResources {
+    filteringCharset = 'UTF-8'
+}
+
+jar {
+    from('src/main/resources/assets/itemseeker/lang/ru_ru.lang') {
+        into('assets/itemseeker/lang')
+        rename { 'ru_RU.lang' }
+    }
+    from('src/main/resources/assets/itemseeker/lang/en_us.lang') {
+        into('assets/itemseeker/lang')
+        rename { 'en_US.lang' }
+    }
+}

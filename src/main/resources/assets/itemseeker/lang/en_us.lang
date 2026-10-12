@@ -1,0 +1,58 @@
+itemGroup.itemseeker=Item Seeker
+item.itemseeker.seeker_wand.name=Seeker's Wand
+
+# Tooltip
+tooltip.itemseeker.target=Target Item: %s
+tooltip.itemseeker.no_target=None
+tooltip.itemseeker.threshold=Quantity Threshold: %d
+tooltip.itemseeker.mode=Search Scope: %s
+tooltip.itemseeker.mode.loaded=Loaded Chunks
+tooltip.itemseeker.mode.radius=Radius (%d blocks)
+tooltip.itemseeker.mode.world=Entire World (Regions)
+tooltip.itemseeker.instructions.1=Right-Click — Open wand settings GUI
+tooltip.itemseeker.instructions.2=Shift + Right-Click — Quick search scan
+tooltip.itemseeker.shift_hint=Hold Shift for details
+
+# GUI
+gui.itemseeker.title=Container Seeker's Wand
+gui.itemseeker.target_label=Target Item:
+gui.itemseeker.empty_filter=[ Insert Item ]
+gui.itemseeker.threshold_label=Threshold:
+gui.itemseeker.mode_label=Search Scope:
+gui.itemseeker.match_nbt=Match NBT:
+gui.itemseeker.match_nbt.on=ON
+gui.itemseeker.match_nbt.off=OFF
+gui.itemseeker.btn_scan=START SEARCH
+gui.itemseeker.btn_clear_markers=Clear Markers
+gui.itemseeker.btn_clear_filter=Clear Filter
+gui.itemseeker.results_title=Found Containers: %d
+gui.itemseeker.no_results=No containers found with the specified item.
+gui.itemseeker.btn_tp=TP
+gui.itemseeker.btn_mark=Mark
+gui.itemseeker.page=Page %d / %d
+
+# Chat
+chat.itemseeker.search_start=Searching for containers with %s (threshold: %d)...
+chat.itemseeker.results_found=Seeker's Wand: Found %d containers:
+chat.itemseeker.entry=- %s at [%d, %d, %d] (Count: %d, Distance: %dm)
+chat.itemseeker.tp_hover=Click to teleport to this container
+chat.itemseeker.tp_success=Teleporting to container at [%d, %d, %d]
+chat.itemseeker.no_results=No containers found within the specified area.
+chat.itemseeker.no_target_set=First select a target item in the wand interface!
+
+# Containers
+container.itemseeker.chest=Chest
+container.itemseeker.trapped_chest=Trapped Chest
+container.itemseeker.ender_chest=Ender Chest
+container.itemseeker.furnace=Furnace
+container.itemseeker.shulker_box=Shulker Box
+container.itemseeker.dispenser=Dispenser
+container.itemseeker.dropper=Dropper
+container.itemseeker.hopper=Hopper
+container.itemseeker.brewing_stand=Brewing Stand
+container.itemseeker.minecart_chest=Minecart with Chest
+container.itemseeker.minecart_hopper=Minecart with Hopper
+container.itemseeker.donkey=Chested Donkey
+container.itemseeker.mule=Chested Mule
+container.itemseeker.llama=Chested Llama
+container.itemseeker.generic_container=Container

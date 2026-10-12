@@ -1,0 +1,16 @@
+[
+{
+  "modid": "itemseeker",
+  "name": "Item Seeker",
+  "description": "A powerful utility mod that introduces the Seeker's Wand to locate any item across chests, furnaces, minecarts, and containers in the world with configurable threshold filtering.",
+  "version": "1.0.0",
+  "mcversion": "1.12.2",
+  "url": "https://github.com/kimarsen/item-seeker",
+  "updateUrl": "",
+  "authorList": ["kimarsen"],
+  "credits": "Created for finding containers across worlds and modpacks",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
