@@ -22,11 +22,21 @@ import java.util.List;
 
 public class ItemSeekerWand extends Item {
 
+    public static final int MAX_SURVIVAL_RADIUS = 48;
+
     public ItemSeekerWand() {
         setRegistryName("seeker_wand");
         setTranslationKey(ItemSeeker.MODID + ".seeker_wand");
         setMaxStackSize(1);
         setCreativeTab(ItemSeeker.CREATIVE_TAB);
+    }
+
+    public boolean isAdminWand() {
+        return false;
+    }
+
+    public static boolean isAdmin(ItemStack wand) {
+        return wand != null && wand.getItem() instanceof ItemAdminSeekerWand;
     }
 
     @Override
@@ -78,6 +88,9 @@ public class ItemSeekerWand extends Item {
     }
 
     public static int getSearchMode(ItemStack wand) {
+        if (!isAdmin(wand)) {
+            return 1; // Survival: always radius mode
+        }
         if (!wand.hasTagCompound() || !wand.getTagCompound().hasKey("SearchMode")) {
             return 0;
         }
@@ -86,19 +99,21 @@ public class ItemSeekerWand extends Item {
 
     public static void setSearchMode(ItemStack wand, int mode) {
         NBTTagCompound tag = getOrCreateTag(wand);
-        tag.setInteger("SearchMode", mode);
+        tag.setInteger("SearchMode", isAdmin(wand) ? mode : 1);
     }
 
     public static int getRadius(ItemStack wand) {
         if (!wand.hasTagCompound() || !wand.getTagCompound().hasKey("Radius")) {
-            return 256;
+            return isAdmin(wand) ? 256 : MAX_SURVIVAL_RADIUS;
         }
-        return wand.getTagCompound().getInteger("Radius");
+        int r = wand.getTagCompound().getInteger("Radius");
+        return isAdmin(wand) ? r : Math.min(MAX_SURVIVAL_RADIUS, Math.max(16, r));
     }
 
     public static void setRadius(ItemStack wand, int radius) {
         NBTTagCompound tag = getOrCreateTag(wand);
-        tag.setInteger("Radius", radius);
+        int finalRadius = isAdmin(wand) ? radius : Math.min(MAX_SURVIVAL_RADIUS, Math.max(16, radius));
+        tag.setInteger("Radius", finalRadius);
     }
 
     public static boolean getMatchNbt(ItemStack wand) {
@@ -113,7 +128,7 @@ public class ItemSeekerWand extends Item {
         tag.setBoolean("MatchNbt", matchNbt);
     }
 
-    private static NBTTagCompound getOrCreateTag(ItemStack stack) {
+    protected static NBTTagCompound getOrCreateTag(ItemStack stack) {
         if (!stack.hasTagCompound()) {
             stack.setTagCompound(new NBTTagCompound());
         }
@@ -125,9 +140,9 @@ public class ItemSeekerWand extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         ItemStack target = getTargetItem(stack);
         int threshold = getThreshold(stack);
-        int mode = getSearchMode(stack);
         int radius = getRadius(stack);
 
+        tooltip.add(TextFormatting.GREEN + "[Для выживания]");
         if (GuiScreen.isShiftKeyDown()) {
             String targetName = target.isEmpty()
                 ? TextFormatting.GRAY + I18n.format("tooltip.itemseeker.no_target")
@@ -135,17 +150,7 @@ public class ItemSeekerWand extends Item {
 
             tooltip.add(I18n.format("tooltip.itemseeker.target", targetName));
             tooltip.add(I18n.format("tooltip.itemseeker.threshold", threshold));
-
-            String modeStr;
-            if (mode == 0) {
-                modeStr = I18n.format("tooltip.itemseeker.mode.loaded");
-            } else if (mode == 1) {
-                modeStr = I18n.format("tooltip.itemseeker.mode.radius", radius);
-            } else {
-                modeStr = I18n.format("tooltip.itemseeker.mode.world");
-            }
-            tooltip.add(I18n.format("tooltip.itemseeker.mode", TextFormatting.YELLOW + modeStr));
-
+            tooltip.add(TextFormatting.GRAY + "Радиус поиска: " + TextFormatting.YELLOW + radius + " блоков (3 чанка)");
             tooltip.add("");
             tooltip.add(TextFormatting.GOLD + I18n.format("tooltip.itemseeker.instructions.1"));
             tooltip.add(TextFormatting.DARK_GRAY + I18n.format("tooltip.itemseeker.instructions.2"));
@@ -154,6 +159,7 @@ public class ItemSeekerWand extends Item {
                 tooltip.add(TextFormatting.GRAY + I18n.format("tooltip.itemseeker.target", TextFormatting.AQUA + target.getDisplayName())
                     + TextFormatting.DARK_GREEN + " (x" + threshold + ")");
             }
+            tooltip.add(TextFormatting.DARK_GRAY + "Ограничен радиусом в 3 чанка от игрока");
             tooltip.add(TextFormatting.DARK_GRAY + I18n.format("tooltip.itemseeker.shift_hint"));
         }
     }

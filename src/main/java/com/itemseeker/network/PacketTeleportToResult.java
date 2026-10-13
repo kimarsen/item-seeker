@@ -45,6 +45,11 @@ public class PacketTeleportToResult implements IMessage {
             WorldServer world = player.getServerWorld();
 
             world.addScheduledTask(() -> {
+                if (!com.itemseeker.admin.AdminHelper.hasPermission(player)) {
+                    com.itemseeker.admin.AdminHelper.sendNoPermission(player);
+                    return;
+                }
+
                 BlockPos target = message.targetPos;
                 BlockPos tpPos = target.up();
                 if (!world.isAirBlock(tpPos)) {

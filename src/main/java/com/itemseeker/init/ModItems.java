@@ -1,10 +1,7 @@
 package com.itemseeker.init;
 
 import com.itemseeker.ItemSeeker;
-import com.itemseeker.item.ItemInspectorWand;
-import com.itemseeker.item.ItemLagWand;
-import com.itemseeker.item.ItemSeekerWand;
-import com.itemseeker.item.ItemStaffWand;
+import com.itemseeker.item.*;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -19,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ModItems {
 
     public static final Item SEEKER_WAND = new ItemSeekerWand();
+    public static final Item ADMIN_SEEKER_WAND = new ItemAdminSeekerWand();
     public static final Item STAFF_WAND = new ItemStaffWand();
     public static final Item INSPECTOR_WAND = new ItemInspectorWand();
     public static final Item LAG_WAND = new ItemLagWand();
@@ -27,6 +25,7 @@ public class ModItems {
     public static void registerItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().registerAll(
             SEEKER_WAND,
+            ADMIN_SEEKER_WAND,
             STAFF_WAND,
             INSPECTOR_WAND,
             LAG_WAND
@@ -37,6 +36,7 @@ public class ModItems {
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
         registerModel(SEEKER_WAND);
+        registerModel(ADMIN_SEEKER_WAND);
         registerModel(STAFF_WAND);
         registerModel(INSPECTOR_WAND);
         registerModel(LAG_WAND);

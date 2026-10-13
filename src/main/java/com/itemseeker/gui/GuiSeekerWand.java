@@ -1,6 +1,7 @@
 package com.itemseeker.gui;
 
 import com.itemseeker.client.SeekerRenderHandler;
+import com.itemseeker.item.ItemAdminSeekerWand;
 import com.itemseeker.item.ItemSeekerWand;
 import com.itemseeker.network.PacketHandler;
 import com.itemseeker.network.PacketStartSearch;
@@ -97,13 +98,23 @@ public class GuiSeekerWand extends GuiContainer {
         updateButtonStates();
     }
 
+    public boolean isAdminWand() {
+        return wandStack.getItem() instanceof ItemAdminSeekerWand;
+    }
+
     private void updateButtonStates() {
         boolean hasResults = !results.isEmpty();
         prevResultButton.enabled = hasResults && currentResultIndex > 0;
         nextResultButton.enabled = hasResults && currentResultIndex < results.size() - 1;
-        tpButton.enabled = hasResults;
+        boolean isAdmin = isAdminWand();
+        tpButton.visible = isAdmin;
+        tpButton.enabled = isAdmin && hasResults;
         markButton.enabled = hasResults;
         clearFilterButton.enabled = !targetStack.isEmpty();
+        if (!isAdmin) {
+            modeButton.enabled = false;
+            modeButton.displayString = "Радиус: " + ItemSeekerWand.MAX_SURVIVAL_RADIUS + " блоков";
+        }
     }
 
     public void setSearchResults(List<SearchResultEntry> newResults) {
@@ -113,6 +124,9 @@ public class GuiSeekerWand extends GuiContainer {
     }
 
     private String getModeString() {
+        if (!isAdminWand()) {
+            return "Радиус: " + ItemSeekerWand.MAX_SURVIVAL_RADIUS + " блоков";
+        }
         if (searchMode == 0) return "Чанки: Загруженные";
         if (searchMode == 1) return "Радиус: " + radius + " блоков";
         return "Весь мир (Регионы)";
@@ -153,6 +167,9 @@ public class GuiSeekerWand extends GuiContainer {
             currentResultIndex = 0;
             updateButtonStates();
         } else if (button.id == 4) { // Mode cycle
+            if (!isAdminWand()) {
+                return;
+            }
             if (searchMode == 0) {
                 searchMode = 1;
                 radius = 256;
@@ -281,7 +298,11 @@ public class GuiSeekerWand extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        fontRenderer.drawString(TextFormatting.GOLD + "" + TextFormatting.BOLD + "Жезл Поиска Контейнеров", 12, 10, 0xFFFFFF);
+        boolean isAdmin = isAdminWand();
+        String title = isAdmin
+            ? TextFormatting.GOLD + "" + TextFormatting.BOLD + "Всевидящий Жезл (Админ)"
+            : TextFormatting.GREEN + "" + TextFormatting.BOLD + "Жезл Поиска (Выживание)";
+        fontRenderer.drawString(title, 12, 10, 0xFFFFFF);
 
         int slotX = 12;
         int slotY = 24;

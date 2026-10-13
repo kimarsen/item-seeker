@@ -72,17 +72,25 @@ public class PacketStartSearch implements IMessage {
                     wand = player.getHeldItem(EnumHand.OFF_HAND);
                 }
 
-                if (wand.getItem() instanceof ItemSeekerWand) {
-                    ItemSeekerWand.setTargetItem(wand, message.targetStack);
-                    ItemSeekerWand.setThreshold(wand, message.threshold);
-                    ItemSeekerWand.setSearchMode(wand, message.searchMode);
-                    ItemSeekerWand.setRadius(wand, message.radius);
-                    ItemSeekerWand.setMatchNbt(wand, message.matchNbt);
+                if (!(wand.getItem() instanceof ItemSeekerWand)) {
+                    return;
                 }
+
+                boolean isAdmin = ItemSeekerWand.isAdmin(wand) && com.itemseeker.admin.AdminHelper.hasPermission(player);
+                int effectiveMode = isAdmin ? message.searchMode : 1;
+                int effectiveRadius = isAdmin ? message.radius : Math.min(message.radius, ItemSeekerWand.MAX_SURVIVAL_RADIUS);
+
+                ItemSeekerWand.setTargetItem(wand, message.targetStack);
+                ItemSeekerWand.setThreshold(wand, message.threshold);
+                ItemSeekerWand.setSearchMode(wand, effectiveMode);
+                ItemSeekerWand.setRadius(wand, effectiveRadius);
+                ItemSeekerWand.setMatchNbt(wand, message.matchNbt);
+
+                String prefix = isAdmin ? "[Всевидящий Жезл] " : "[Жезл Поиска] ";
 
                 if (message.targetStack.isEmpty()) {
                     player.sendMessage(new TextComponentString(
-                        TextFormatting.RED + "[Жезл Поиска] Не выбран искомый предмет! Поместите предмет в слот фильтра."
+                        TextFormatting.RED + prefix + "Не выбран искомый предмет! Поместите предмет в слот фильтра."
                     ));
                     return;
                 }
@@ -92,8 +100,8 @@ public class PacketStartSearch implements IMessage {
                     player,
                     message.targetStack,
                     message.threshold,
-                    message.searchMode,
-                    message.radius,
+                    effectiveMode,
+                    effectiveRadius,
                     message.matchNbt
                 );
 
@@ -101,13 +109,13 @@ public class PacketStartSearch implements IMessage {
 
                 if (results.isEmpty()) {
                     player.sendMessage(new TextComponentString(
-                        TextFormatting.RED + "[Жезл Поиска] Контейнеры с " + TextFormatting.AQUA + message.targetStack.getDisplayName()
+                        TextFormatting.RED + prefix + "Контейнеры с " + TextFormatting.AQUA + message.targetStack.getDisplayName()
                             + TextFormatting.RED + " в количестве от " + TextFormatting.YELLOW + message.threshold
                             + TextFormatting.RED + " не найдены."
                     ));
                 } else {
                     player.sendMessage(new TextComponentString(
-                        TextFormatting.GOLD + "[Жезл Поиска] " + TextFormatting.WHITE + "Найдено "
+                        TextFormatting.GOLD + prefix + TextFormatting.WHITE + "Найдено "
                             + TextFormatting.YELLOW + results.size() + TextFormatting.WHITE + " контейнеров с "
                             + TextFormatting.AQUA + message.targetStack.getDisplayName()
                             + TextFormatting.WHITE + " (порог: " + TextFormatting.GREEN + message.threshold + TextFormatting.WHITE + "):"
@@ -123,16 +131,19 @@ public class PacketStartSearch implements IMessage {
                                 + TextFormatting.YELLOW + "[" + (int) entry.distance + "м] "
                         );
 
-                        ITextComponent tpBtn = new TextComponentString(TextFormatting.GOLD + "[ТП]");
-                        tpBtn.getStyle().setClickEvent(new ClickEvent(
-                            ClickEvent.Action.RUN_COMMAND,
-                            "/tp " + entry.pos.getX() + " " + (entry.pos.getY() + 1) + " " + entry.pos.getZ()
-                        ));
-                        tpBtn.getStyle().setHoverEvent(new HoverEvent(
-                            HoverEvent.Action.SHOW_TEXT,
-                            new TextComponentString(TextFormatting.YELLOW + "Нажмите для телепортации")
-                        ));
-                        line.appendSibling(tpBtn);
+                        if (isAdmin) {
+                            ITextComponent tpBtn = new TextComponentString(TextFormatting.GOLD + "[ТП]");
+                            tpBtn.getStyle().setClickEvent(new ClickEvent(
+                                ClickEvent.Action.RUN_COMMAND,
+                                "/tp " + entry.pos.getX() + " " + (entry.pos.getY() + 1) + " " + entry.pos.getZ()
+                            ));
+                            tpBtn.getStyle().setHoverEvent(new HoverEvent(
+                                HoverEvent.Action.SHOW_TEXT,
+                                new TextComponentString(TextFormatting.YELLOW + "Нажмите для телепортации")
+                            ));
+                            line.appendSibling(tpBtn);
+                        }
+
                         player.sendMessage(line);
                     }
 

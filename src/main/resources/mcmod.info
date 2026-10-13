@@ -1,8 +1,8 @@
 [
 {
   "modid": "itemseeker",
-  "name": "Item Seeker",
-  "description": "A powerful utility mod that introduces the Seeker's Wand to locate any item across chests, furnaces, minecarts, and containers in the world with configurable threshold filtering.",
+  "name": "Item Seeker & Admin Tools",
+  "description": "A powerful utility and administration mod featuring Seeker's Wands (Survival local radar & Admin omniscient world scanner) and an advanced server moderation toolkit (Staff Moderation Wand, Inspector's Audit Wand, Lag Buster Wand).",
   "version": "1.0.0",
   "mcversion": "1.12.2",
   "url": "https://github.com/kimarsen/item-seeker",
