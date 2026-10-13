@@ -25,10 +25,14 @@ public class ItemSeekerWand extends Item {
     public static final int MAX_SURVIVAL_RADIUS = 48;
 
     public ItemSeekerWand() {
-        setRegistryName("seeker_wand");
-        setTranslationKey(ItemSeeker.MODID + ".seeker_wand");
-        setMaxStackSize(1);
+        this("seeker_wand");
         setCreativeTab(ItemSeeker.CREATIVE_TAB);
+    }
+
+    protected ItemSeekerWand(String name) {
+        setRegistryName(name);
+        setTranslationKey(ItemSeeker.MODID + "." + name);
+        setMaxStackSize(1);
     }
 
     public boolean isAdminWand() {

@@ -28,9 +28,7 @@ import net.minecraft.util.text.TextComponentString;
 public class ItemAdminSeekerWand extends ItemSeekerWand {
 
     public ItemAdminSeekerWand() {
-        setRegistryName("admin_seeker_wand");
-        setTranslationKey(ItemSeeker.MODID + ".admin_seeker_wand");
-        setMaxStackSize(1);
+        super("admin_seeker_wand");
         setCreativeTab(null);
     }
 
