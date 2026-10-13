@@ -16,14 +16,16 @@ public class ContainerSeekerWand extends Container {
         this.wandStack = wandStack;
         this.player = playerInv.player;
 
+        int invLeft = (248 - 162) / 2; // 43 px, centered in 248 px GUI
+
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
-                addSlotToContainer(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 140 + row * 18));
+                addSlotToContainer(new Slot(playerInv, col + row * 9 + 9, invLeft + col * 18, 140 + row * 18));
             }
         }
 
         for (int col = 0; col < 9; col++) {
-            addSlotToContainer(new Slot(playerInv, col, 8 + col * 18, 198));
+            addSlotToContainer(new Slot(playerInv, col, invLeft + col * 18, 198));
         }
     }
 

@@ -11,9 +11,10 @@ import com.itemseeker.search.SearchResultEntry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.input.Keyboard;
@@ -69,23 +70,27 @@ public class GuiSeekerWand extends GuiContainer {
         super.initGui();
         Keyboard.enableRepeatEvents(true);
 
-        thresholdField = new GuiTextField(0, fontRenderer, guiLeft + 12, guiTop + 54, 42, 16);
+        boolean isAdmin = isAdminWand();
+
+        thresholdField = new GuiTextField(0, fontRenderer, guiLeft + 84, guiTop + 54, 30, 16);
         thresholdField.setText(String.valueOf(threshold));
         thresholdField.setMaxStringLength(7);
+        thresholdField.setTextColor(isAdmin ? 0xFFAAAA : 0xFFFFFF);
 
         buttonList.clear();
 
-        addButton(new GuiButton(10, guiLeft + 58, guiTop + 53, 22, 18, "1"));
-        addButton(new GuiButton(11, guiLeft + 82, guiTop + 53, 26, 18, "16"));
-        addButton(new GuiButton(12, guiLeft + 110, guiTop + 53, 26, 18, "32"));
-        addButton(new GuiButton(13, guiLeft + 138, guiTop + 53, 26, 18, "64"));
-        addButton(new GuiButton(14, guiLeft + 166, guiTop + 53, 34, 18, "128"));
-        addButton(new GuiButton(15, guiLeft + 202, guiTop + 53, 34, 18, "256"));
+        addButton(new GuiButton(10, guiLeft + 118, guiTop + 53, 18, 18, "1"));
+        addButton(new GuiButton(11, guiLeft + 138, guiTop + 53, 18, 18, "16"));
+        addButton(new GuiButton(12, guiLeft + 158, guiTop + 53, 18, 18, "32"));
+        addButton(new GuiButton(13, guiLeft + 178, guiTop + 53, 18, 18, "64"));
+        addButton(new GuiButton(14, guiLeft + 198, guiTop + 53, 20, 18, "128"));
+        addButton(new GuiButton(15, guiLeft + 220, guiTop + 53, 20, 18, "256"));
 
         modeButton = addButton(new GuiButton(4, guiLeft + 12, guiTop + 74, 142, 18, getModeString()));
         nbtButton = addButton(new GuiButton(5, guiLeft + 158, guiTop + 74, 78, 18, getNbtString()));
 
-        scanButton = addButton(new GuiButton(1, guiLeft + 12, guiTop + 95, 126, 20, TextFormatting.GREEN + "" + TextFormatting.BOLD + "НАЧАТЬ ПОИСК"));
+        String scanText = (isAdmin ? TextFormatting.RED : TextFormatting.GREEN) + "" + TextFormatting.BOLD + "НАЧАТЬ ПОИСК";
+        scanButton = addButton(new GuiButton(1, guiLeft + 12, guiTop + 95, 126, 20, scanText));
         clearMarkersButton = addButton(new GuiButton(3, guiLeft + 142, guiTop + 95, 94, 20, TextFormatting.RED + "Сброс меток"));
 
         clearFilterButton = addButton(new GuiButton(2, guiLeft + 172, guiTop + 24, 64, 18, "Очистить"));
@@ -279,29 +284,80 @@ public class GuiSeekerWand extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        drawRect(guiLeft, guiTop, guiLeft + xSize, guiTop + ySize, 0xEE1A1A22);
+        boolean isAdmin = isAdminWand();
 
-        drawRect(guiLeft, guiTop, guiLeft + xSize, guiTop + 1, 0xFFC8963E);
-        drawRect(guiLeft, guiTop + ySize - 1, guiLeft + xSize, guiTop + ySize, 0xFFC8963E);
-        drawRect(guiLeft, guiTop, guiLeft + 1, guiTop + ySize, 0xFFC8963E);
-        drawRect(guiLeft + xSize - 1, guiTop, guiLeft + xSize, guiTop + ySize, 0xFFC8963E);
+        // 1. Window Background (Burgundy for admin, dark slate for survival)
+        int bgColor = isAdmin ? 0xF2220912 : 0xEE1A1A22;
+        drawRect(guiLeft, guiTop, guiLeft + xSize, guiTop + ySize, bgColor);
 
+        // 2. Outer Border (Rich crimson burgundy vs gold)
+        int borderOuter = isAdmin ? 0xFF8B1229 : 0xFFC8963E;
+        drawRect(guiLeft, guiTop, guiLeft + xSize, guiTop + 1, borderOuter);
+        drawRect(guiLeft, guiTop + ySize - 1, guiLeft + xSize, guiTop + ySize, borderOuter);
+        drawRect(guiLeft, guiTop + 1, guiLeft + 1, guiTop + ySize, borderOuter);
+        drawRect(guiLeft + xSize - 1, guiTop, guiLeft + xSize, guiTop + ySize, borderOuter);
+
+        // 3. Inner Border Accent
+        int borderInner = isAdmin ? 0xFF4A0A16 : 0xFF3E2D13;
+        drawRect(guiLeft + 1, guiTop + 1, guiLeft + xSize - 1, guiTop + 2, borderInner);
+        drawRect(guiLeft + 1, guiTop + ySize - 2, guiLeft + xSize - 1, guiTop + ySize - 1, borderInner);
+        drawRect(guiLeft + 1, guiTop + 1, guiLeft + 2, guiTop + ySize - 1, borderInner);
+        drawRect(guiLeft + xSize - 2, guiTop + 1, guiLeft + xSize - 1, guiTop + ySize - 1, borderInner);
+
+        // 4. Target Item Slot
         int slotX = guiLeft + 12;
         int slotY = guiTop + 24;
-        drawRect(slotX - 1, slotY - 1, slotX + 19, slotY + 19, 0xFF3EC896);
-        drawRect(slotX, slotY, slotX + 18, slotY + 18, 0xFF2A2A35);
+        int targetSlotBorder = isAdmin ? 0xFFC42343 : 0xFF3EC896;
+        int targetSlotInner = isAdmin ? 0xFF350E1A : 0xFF2A2A35;
+        drawRect(slotX - 1, slotY - 1, slotX + 19, slotY + 19, targetSlotBorder);
+        drawRect(slotX, slotY, slotX + 18, slotY + 18, targetSlotInner);
 
-        drawRect(guiLeft + 10, guiTop + 116, guiLeft + xSize - 10, guiTop + 136, 0xFF22222E);
+        // 5. Results bar
+        int resBg = isAdmin ? 0xFF320D1A : 0xFF22222E;
+        int resBorder = isAdmin ? 0xFF65172B : 0xFF3E3E4E;
+        drawRect(guiLeft + 10, guiTop + 116, guiLeft + xSize - 10, guiTop + 136, resBg);
+        drawRect(guiLeft + 10, guiTop + 116, guiLeft + xSize - 10, guiTop + 117, resBorder);
+        drawRect(guiLeft + 10, guiTop + 135, guiLeft + xSize - 10, guiTop + 136, resBorder);
 
-        drawRect(guiLeft + 6, guiTop + 138, guiLeft + xSize - 6, guiTop + 218, 0xFF14141A);
+        // 6. Inventory Panel (Centered behind slots)
+        int invLeft = (xSize - 162) / 2; // 43
+        int invPanelBg = isAdmin ? 0xFF19060D : 0xFF14141A;
+        int invPanelBorder = isAdmin ? 0xFF540E1D : 0xFF2A2A35;
+        drawRect(guiLeft + invLeft - 5, guiTop + 136, guiLeft + invLeft + 162 + 5, guiTop + 219, invPanelBg);
+        drawRect(guiLeft + invLeft - 5, guiTop + 136, guiLeft + invLeft + 162 + 5, guiTop + 137, invPanelBorder);
+        drawRect(guiLeft + invLeft - 5, guiTop + 218, guiLeft + invLeft + 162 + 5, guiTop + 219, invPanelBorder);
+        drawRect(guiLeft + invLeft - 5, guiTop + 136, guiLeft + invLeft - 4, guiTop + 219, invPanelBorder);
+        drawRect(guiLeft + invLeft + 162 + 4, guiTop + 136, guiLeft + invLeft + 162 + 5, guiTop + 219, invPanelBorder);
+
+        // 7. Render all inventory slot frames
+        for (Slot slot : inventorySlots.inventorySlots) {
+            drawSlotFrame(guiLeft + slot.xPos, guiTop + slot.yPos, isAdmin);
+        }
+    }
+
+    private void drawSlotFrame(int x, int y, boolean isAdmin) {
+        int darkBorder = isAdmin ? 0xFF100307 : 0xFF0D0D12;
+        int lightBorder = isAdmin ? 0xFF6A1728 : 0xFF424254;
+        int innerBg = isAdmin ? 0xFF2A0B15 : 0xFF1C1C26;
+
+        // Top edge (dark)
+        drawRect(x - 1, y - 1, x + 17, y, darkBorder);
+        // Left edge (dark)
+        drawRect(x - 1, y - 1, x, y + 17, darkBorder);
+        // Right edge (highlight)
+        drawRect(x + 16, y, x + 17, y + 17, lightBorder);
+        // Bottom edge (highlight)
+        drawRect(x, y + 16, x + 17, y + 17, lightBorder);
+        // Slot interior (16x16)
+        drawRect(x, y, x + 16, y + 16, innerBg);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         boolean isAdmin = isAdminWand();
         String title = isAdmin
-            ? TextFormatting.GOLD + "" + TextFormatting.BOLD + "Всевидящий Жезл (Админ)"
-            : TextFormatting.GREEN + "" + TextFormatting.BOLD + "Жезл Поиска (Выживание)";
+            ? TextFormatting.RED + "" + TextFormatting.BOLD + "Всевидящий Жезл"
+            : TextFormatting.GREEN + "" + TextFormatting.BOLD + "Жезл Поиска";
         fontRenderer.drawString(title, 12, 10, 0xFFFFFF);
 
         int slotX = 12;
@@ -321,6 +377,10 @@ public class GuiSeekerWand extends GuiContainer {
         } else {
             fontRenderer.drawString(TextFormatting.DARK_GRAY + "[ Кликните предметом для выбора ]", slotX + 24, slotY + 5, 0xFFFFFF);
         }
+
+        // Threshold label to the left of the number buttons
+        String thresholdLabel = "Порог поиска:";
+        fontRenderer.drawString(thresholdLabel, 12, 58, isAdmin ? 0xFFE0CC : 0xCCCCCC);
 
         if (results.isEmpty()) {
             fontRenderer.drawString(TextFormatting.GRAY + "Результаты поиска отсутствуют", 54, 122, 0xFFFFFF);

@@ -1,6 +1,6 @@
 itemGroup.itemseeker=Item Seeker & Admin Tools
-item.itemseeker.seeker_wand.name=Жезл Поиска (Выживание)
-item.itemseeker.admin_seeker_wand.name=Всевидящий Жезл (Админ)
+item.itemseeker.seeker_wand.name=Жезл Поиска
+item.itemseeker.admin_seeker_wand.name=Всевидящий Жезл
 item.itemseeker.staff_wand.name=Посох Модератора
 item.itemseeker.inspector_wand.name=Жезл Ревизора
 item.itemseeker.lag_wand.name=Жезл Оптимизации

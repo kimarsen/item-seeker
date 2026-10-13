@@ -146,7 +146,7 @@ public class ItemSeekerWand extends Item {
         int threshold = getThreshold(stack);
         int radius = getRadius(stack);
 
-        tooltip.add(TextFormatting.GREEN + "[Для выживания]");
+        tooltip.add(TextFormatting.GREEN + "" + TextFormatting.BOLD + "[Жезл Поиска]");
         if (GuiScreen.isShiftKeyDown()) {
             String targetName = target.isEmpty()
                 ? TextFormatting.GRAY + I18n.format("tooltip.itemseeker.no_target")

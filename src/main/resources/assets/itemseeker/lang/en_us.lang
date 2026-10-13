@@ -1,6 +1,6 @@
 itemGroup.itemseeker=Item Seeker & Admin Tools
-item.itemseeker.seeker_wand.name=Seeker's Wand (Survival)
-item.itemseeker.admin_seeker_wand.name=Omniscient Seeker's Wand (Admin)
+item.itemseeker.seeker_wand.name=Seeker's Wand
+item.itemseeker.admin_seeker_wand.name=Omniscient Seeker's Wand
 item.itemseeker.staff_wand.name=Staff Moderation Wand
 item.itemseeker.inspector_wand.name=Inspector's Audit Wand
 item.itemseeker.lag_wand.name=Lag Buster Wand

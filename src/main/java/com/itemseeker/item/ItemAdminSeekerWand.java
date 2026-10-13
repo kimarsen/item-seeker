@@ -89,7 +89,7 @@ public class ItemAdminSeekerWand extends ItemSeekerWand {
         int mode = getSearchMode(stack);
         int radius = getRadius(stack);
 
-        tooltip.add(TextFormatting.RED + "" + TextFormatting.BOLD + "[Всевидящий Админ-Жезл]");
+        tooltip.add(TextFormatting.RED + "" + TextFormatting.BOLD + "[Всевидящий Жезл]");
         tooltip.add(TextFormatting.DARK_RED + "Только для операторов (/op) • Выдача: /give");
         if (GuiScreen.isShiftKeyDown()) {
             String targetName = target.isEmpty()

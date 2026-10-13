@@ -201,10 +201,32 @@ public class ItemInspectorWand extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(TextFormatting.RED + "" + TextFormatting.BOLD + "[Инструмент Администратора]");
         tooltip.add(TextFormatting.DARK_RED + "Только для операторов (/op) • Выдача: /give");
+
+        net.minecraft.client.entity.EntityPlayerSP clientPlayer = net.minecraft.client.Minecraft.getMinecraft().player;
+        if (clientPlayer != null) {
+            ItemStack target = clientPlayer.getHeldItemOffhand();
+            String source = " (из левой руки [F])";
+            if (target.isEmpty()) {
+                for (ItemStack s : clientPlayer.inventory.mainInventory) {
+                    if (s.getItem() instanceof ItemSeekerWand) {
+                        target = ItemSeekerWand.getTargetItem(s);
+                        source = " (из Жезла Поиска)";
+                        break;
+                    }
+                }
+            }
+
+            if (!target.isEmpty()) {
+                tooltip.add(TextFormatting.GOLD + "Искомый предмет: " + TextFormatting.AQUA + target.getDisplayName() + TextFormatting.DARK_GRAY + source);
+            } else {
+                tooltip.add(TextFormatting.GRAY + "Искомый предмет: " + TextFormatting.DARK_GRAY + "[Не выбран]");
+                tooltip.add(TextFormatting.DARK_GRAY + "  (положите предмет в левую руку [F] или в Жезл Поиска)");
+            }
+        }
+
         if (GuiScreen.isShiftKeyDown()) {
             tooltip.add(TextFormatting.GOLD + "ПКМ по блоку: " + TextFormatting.WHITE + "Скрытый досмотр сундука на расстоянии (до 64 блоков)");
             tooltip.add(TextFormatting.GOLD + "Shift + ПКМ в воздух: " + TextFormatting.WHITE + "Аудит инвентарей и эндер-сундуков игроков");
-            tooltip.add(TextFormatting.DARK_GRAY + "  (использует предмет из Offhand или Жезла Поиска)");
         } else {
             tooltip.add(TextFormatting.GRAY + "Зажмите Shift для просмотра функций");
         }
