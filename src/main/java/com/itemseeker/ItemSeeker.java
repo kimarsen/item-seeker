@@ -1,11 +1,13 @@
 package com.itemseeker;
 
+import com.itemseeker.admin.AdminEventHandler;
 import com.itemseeker.gui.GuiHandler;
 import com.itemseeker.init.ModItems;
 import com.itemseeker.network.PacketHandler;
 import com.itemseeker.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -50,6 +52,7 @@ public class ItemSeeker {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+        MinecraftForge.EVENT_BUS.register(new AdminEventHandler());
         proxy.init(event);
     }
 

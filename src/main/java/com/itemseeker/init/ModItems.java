@@ -1,7 +1,10 @@
 package com.itemseeker.init;
 
 import com.itemseeker.ItemSeeker;
+import com.itemseeker.item.ItemInspectorWand;
+import com.itemseeker.item.ItemLagWand;
 import com.itemseeker.item.ItemSeekerWand;
+import com.itemseeker.item.ItemStaffWand;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -16,20 +19,36 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ModItems {
 
     public static final Item SEEKER_WAND = new ItemSeekerWand();
+    public static final Item STAFF_WAND = new ItemStaffWand();
+    public static final Item INSPECTOR_WAND = new ItemInspectorWand();
+    public static final Item LAG_WAND = new ItemLagWand();
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        event.getRegistry().register(SEEKER_WAND);
+        event.getRegistry().registerAll(
+            SEEKER_WAND,
+            STAFF_WAND,
+            INSPECTOR_WAND,
+            LAG_WAND
+        );
     }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        if (SEEKER_WAND.getRegistryName() != null) {
+        registerModel(SEEKER_WAND);
+        registerModel(STAFF_WAND);
+        registerModel(INSPECTOR_WAND);
+        registerModel(LAG_WAND);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static void registerModel(Item item) {
+        if (item.getRegistryName() != null) {
             ModelLoader.setCustomModelResourceLocation(
-                SEEKER_WAND,
+                item,
                 0,
-                new ModelResourceLocation(SEEKER_WAND.getRegistryName(), "inventory")
+                new ModelResourceLocation(item.getRegistryName(), "inventory")
             );
         }
     }

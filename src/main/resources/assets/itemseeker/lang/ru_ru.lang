@@ -1,5 +1,8 @@
-itemGroup.itemseeker=Item Seeker (Жезл Поиска)
+itemGroup.itemseeker=Item Seeker (Жезл Поиска & Админ-инструменты)
 item.itemseeker.seeker_wand.name=Жезл Поиска
+item.itemseeker.staff_wand.name=Посох Модератора
+item.itemseeker.inspector_wand.name=Жезл Ревизора
+item.itemseeker.lag_wand.name=Жезл Оптимизации
 
 # Tooltip
 tooltip.itemseeker.target=Искомый предмет: %s

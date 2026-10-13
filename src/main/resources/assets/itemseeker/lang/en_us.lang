@@ -1,5 +1,8 @@
-itemGroup.itemseeker=Item Seeker
+itemGroup.itemseeker=Item Seeker & Admin Tools
 item.itemseeker.seeker_wand.name=Seeker's Wand
+item.itemseeker.staff_wand.name=Staff Moderation Wand
+item.itemseeker.inspector_wand.name=Inspector's Audit Wand
+item.itemseeker.lag_wand.name=Lag Buster Wand
 
 # Tooltip
 tooltip.itemseeker.target=Target Item: %s
