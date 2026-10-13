@@ -1,6 +1,7 @@
 package com.itemseeker.admin;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -29,8 +30,22 @@ public class AdminEventHandler {
     }
 
     @SubscribeEvent
+    public void onItemPickup(net.minecraftforge.event.entity.player.EntityItemPickupEvent event) {
+        if (AdminHelper.isAdminTool(event.getItem().getItem())) {
+            if (!AdminHelper.hasPermission(event.getEntityPlayer())) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
         if (AdminHelper.isFrozen(event.getPlayer())) {
+            event.setCanceled(true);
+            return;
+        }
+        ItemStack held = event.getPlayer().getHeldItemMainhand();
+        if (AdminHelper.isAdminTool(held) && !AdminHelper.hasPermission(event.getPlayer())) {
             event.setCanceled(true);
         }
     }
@@ -46,12 +61,25 @@ public class AdminEventHandler {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (AdminHelper.isFrozen(event.getEntityPlayer())) {
             event.setCanceled(true);
+            return;
+        }
+        ItemStack held = event.getItemStack();
+        if (AdminHelper.isAdminTool(held) && !AdminHelper.hasPermission(event.getEntityPlayer())) {
+            event.setCanceled(true);
+            if (!event.getWorld().isRemote) {
+                AdminHelper.sendNoPermission(event.getEntityPlayer());
+            }
         }
     }
 
     @SubscribeEvent
     public void onAttackEntity(AttackEntityEvent event) {
         if (AdminHelper.isFrozen(event.getEntityPlayer())) {
+            event.setCanceled(true);
+            return;
+        }
+        ItemStack held = event.getEntityPlayer().getHeldItemMainhand();
+        if (AdminHelper.isAdminTool(held) && !AdminHelper.hasPermission(event.getEntityPlayer())) {
             event.setCanceled(true);
         }
     }

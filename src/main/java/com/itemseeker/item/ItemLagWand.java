@@ -32,13 +32,37 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.util.NonNullList;
+
 public class ItemLagWand extends Item {
 
     public ItemLagWand() {
         setRegistryName("lag_wand");
         setTranslationKey(ItemSeeker.MODID + ".lag_wand");
         setMaxStackSize(1);
-        setCreativeTab(ItemSeeker.CREATIVE_TAB);
+        setCreativeTab(null);
+    }
+
+    @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        // Excluded from all creative tabs - obtain via /give command only
+    }
+
+    @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+        if (!worldIn.isRemote && entityIn instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) entityIn;
+            if (!AdminHelper.hasPermission(player)) {
+                player.inventory.deleteStack(stack);
+                player.inventoryContainer.detectAndSendChanges();
+                player.sendMessage(new TextComponentString(
+                    TextFormatting.RED + "[Изъятие] Предмет " + TextFormatting.YELLOW + stack.getDisplayName()
+                        + TextFormatting.RED + " изъят: требуются права оператора (/op)."
+                ));
+            }
+        }
     }
 
     @Override
@@ -165,6 +189,7 @@ public class ItemLagWand extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(TextFormatting.RED + "" + TextFormatting.BOLD + "[Инструмент Администратора]");
+        tooltip.add(TextFormatting.DARK_RED + "Только для операторов (/op) • Выдача: /give");
         if (GuiScreen.isShiftKeyDown()) {
             tooltip.add(TextFormatting.GOLD + "ПКМ в воздух: " + TextFormatting.WHITE + "Замер TPS, RAM и поиск самых перегруженных чанков");
             tooltip.add(TextFormatting.GOLD + "Shift + ПКМ в воздух: " + TextFormatting.WHITE + "Очистить выброшенные предметы (EntityItem) в радиусе 64 блоков");

@@ -53,7 +53,8 @@ To ensure fair multiplayer gameplay without ruining survival balance or revealin
 | Feature | 🌿 Seeker's Wand (Survival) | 👑 Omniscient Seeker's Wand (Admin) |
 | :--- | :--- | :--- |
 | **Item ID** | `itemseeker:seeker_wand` | `itemseeker:admin_seeker_wand` |
-| **Acquisition** | Craftable via standard crafting recipe | Creative mode / `/give` (OP permission only) |
+| **Acquisition** | Craftable via standard crafting recipe | Exclusively via `/give` command (Hidden from Creative tabs) |
+| **Required Permissions** | Any player (Survival friendly) | Server Operators Only (`/op` level >= 2) |
 | **Crafting Recipe** | ✅ Yes (Ender Eye, Compass, Gold, Blaze Rod) | ❌ None (Uncraftable) |
 | **Search Range** | Strictly local: **48 blocks (2–3 chunks)** | Unrestricted (Loaded chunks, Radius up to 1024m, Entire World) |
 | **Region Files (.mca)** | ❌ Disabled (Cannot scan world files) | ✅ Asynchronous deep `.mca` scanner |
@@ -80,9 +81,12 @@ The **Survival Seeker's Wand** is crafted on a vanilla Crafting Table:
 
 ---
 
-## 🛡️ Admin & Moderation Tools (OP / Creative Only)
+## 🛡️ Admin & Moderation Tools (OP / `/give` Only)
 
-All admin tools have **NO crafting recipes** and strictly verify operator permissions (`permission level >= 2` or Creative):
+All admin tools have **NO crafting recipes**, are **hidden from all Creative tabs / JEI**, and can **ONLY be obtained via the `/give` command**. Furthermore, they strictly require Server Operator (`/op`) status:
+* If a non-operator player somehow acquires an admin tool, it is immediately confiscated.
+* Non-operators cannot pick up dropped admin tools (`EntityItemPickupEvent` cancelled).
+* Non-operators cannot execute any actions or commands with admin tools.
 
 ### 1. 👑 Omniscient Seeker's Wand (`itemseeker:admin_seeker_wand`)
 * **Global Container Radar:** Scans loaded chunks, custom radii, or the entire world's `.mca` region files.
@@ -200,7 +204,8 @@ All admin tools have **NO crafting recipes** and strictly verify operator permis
 | Характеристика | 🌿 Жезл Поиска (Выживание) | 👑 Всевидящий Жезл (Админ) |
 | :--- | :--- | :--- |
 | **ID предмета** | `itemseeker:seeker_wand` | `itemseeker:admin_seeker_wand` |
-| **Получение** | Крафт на верстаке в выживании | Только Креатив / команда `/give` (требуются права OP) |
+| **Получение** | Крафт на верстаке в выживании | Исключительно команда `/give` (скрыт из Креатива и JEI) |
+| **Необходимые права** | Доступен всем игрокам (выживание) | Только операторы сервера (`/op` уровень >= 2) |
 | **Крафт** | ✅ Есть (Око Края, Компас, Золото, Стержень ифрита) | ❌ Нет (без крафта) |
 | **Радиус поиска** | Строго локальный: **48 блоков (2–3 чанка)** | Без ограничений (Загруженные чанки, Радиус до 1024м, Весь мир) |
 | **Поиск по регион-файлам (.mca)** | ❌ Заблокирован | ✅ Глубокое асинхронное чтение файлов региона |
@@ -225,7 +230,12 @@ All admin tools have **NO crafting recipes** and strictly verify operator permis
 
 ---
 
-### 🛡️ Инструменты Администратора и Модератора (Без крафта, только OP/Креатив)
+### 🛡️ Инструменты Администратора и Модератора (Только OP / Только `/give`)
+
+Все админские инструменты **не имеют крафта**, **полностью скрыты из вкладок Креатива и JEI** и могут быть получены **исключительно командой `/give`**. Для их использования строго требуются права оператора сервера (`/op`):
+* При попытке получить или взять инструмент не-оператором, предмет моментально изымается из инвентаря.
+* Обычные игроки не могут подобрать выброшенные инструменты с земли.
+* Любые действия и клики инструментами блокируются для игроков без прав оператора.
 
 1. **👑 Всевидящий Жезл Поиска (`itemseeker:admin_seeker_wand`)**:
    * Поиск по загруженным чанкам, настраиваемому радиусу и по незагруженным регион-файлам (`.mca`) всего мира без создания серверных лагов.

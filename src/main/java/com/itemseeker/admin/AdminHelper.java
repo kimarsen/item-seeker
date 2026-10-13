@@ -1,8 +1,14 @@
 package com.itemseeker.admin;
 
+import com.itemseeker.item.ItemAdminSeekerWand;
+import com.itemseeker.item.ItemInspectorWand;
+import com.itemseeker.item.ItemLagWand;
+import com.itemseeker.item.ItemStaffWand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -16,15 +22,29 @@ public class AdminHelper {
     public static final Map<UUID, BlockPos> FROZEN_POSITIONS = new HashMap<>();
 
     public static boolean hasPermission(EntityPlayer player) {
+        if (player == null) {
+            return false;
+        }
         if (player.world.isRemote) {
             return true;
         }
-        return player.isCreative() || player.canUseCommand(2, "");
+        return player.canUseCommand(2, "");
+    }
+
+    public static boolean isAdminTool(net.minecraft.item.Item item) {
+        return item instanceof ItemAdminSeekerWand
+            || item instanceof ItemStaffWand
+            || item instanceof ItemInspectorWand
+            || item instanceof ItemLagWand;
+    }
+
+    public static boolean isAdminTool(ItemStack stack) {
+        return stack != null && !stack.isEmpty() && isAdminTool(stack.getItem());
     }
 
     public static void sendNoPermission(EntityPlayer player) {
         player.sendMessage(new TextComponentString(
-            TextFormatting.RED + "[Отказ в доступе] Этот инструмент доступен только администраторам и модераторам сервера."
+            TextFormatting.RED + "[Отказ в доступе] Этот инструмент доступен только операторам сервера (требуются права /op)."
         ));
     }
 

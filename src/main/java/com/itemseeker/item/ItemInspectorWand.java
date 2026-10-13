@@ -29,13 +29,38 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.NonNullList;
+
 public class ItemInspectorWand extends Item {
 
     public ItemInspectorWand() {
         setRegistryName("inspector_wand");
         setTranslationKey(ItemSeeker.MODID + ".inspector_wand");
         setMaxStackSize(1);
-        setCreativeTab(ItemSeeker.CREATIVE_TAB);
+        setCreativeTab(null);
+    }
+
+    @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        // Excluded from all creative tabs - obtain via /give command only
+    }
+
+    @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+        if (!worldIn.isRemote && entityIn instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) entityIn;
+            if (!AdminHelper.hasPermission(player)) {
+                player.inventory.deleteStack(stack);
+                player.inventoryContainer.detectAndSendChanges();
+                player.sendMessage(new TextComponentString(
+                    TextFormatting.RED + "[Изъятие] Предмет " + TextFormatting.YELLOW + stack.getDisplayName()
+                        + TextFormatting.RED + " изъят: требуются права оператора (/op)."
+                ));
+            }
+        }
     }
 
     @Override
@@ -175,6 +200,7 @@ public class ItemInspectorWand extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(TextFormatting.RED + "" + TextFormatting.BOLD + "[Инструмент Администратора]");
+        tooltip.add(TextFormatting.DARK_RED + "Только для операторов (/op) • Выдача: /give");
         if (GuiScreen.isShiftKeyDown()) {
             tooltip.add(TextFormatting.GOLD + "ПКМ по блоку: " + TextFormatting.WHITE + "Скрытый досмотр сундука на расстоянии (до 64 блоков)");
             tooltip.add(TextFormatting.GOLD + "Shift + ПКМ в воздух: " + TextFormatting.WHITE + "Аудит инвентарей и эндер-сундуков игроков");
